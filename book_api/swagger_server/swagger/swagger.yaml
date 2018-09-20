@@ -1,0 +1,188 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server of our Book App.  \n You can find out more about     Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).      For this sample, you can use the api key `special-key` to test the authorization     filters."
+  version: "1.0.0"
+  title: "Swagger Petstore"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "apiteam@swagger.io"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "petstore.swagger.io"
+basePath: "/api"
+tags:
+- name: "Book"
+  description: "Everything about Books"
+  externalDocs:
+    description: "Find out more"
+    url: "http://0.0.0.0:8080/"
+schemes:
+- "https"
+- "http"
+paths:
+  /book:
+    post:
+      tags:
+      - "Book"
+      summary: "Adds a new book to the store"
+      description: ""
+      operationId: "addBook"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Book object that needs to be added to the store"
+        required: true
+        schema:
+          $ref: "#/definitions/Book"
+      responses:
+        405:
+          description: "Invalid input"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+    
+  /book/{bookId}:
+    get:
+      tags:
+      - "Book"
+      summary: "Finds book by ID"
+      description: "Returns a single book"
+      operationId: "getBookById"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "bookId"
+        in: "path"
+        description: "ID of Book to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Book"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Book not found"
+      security:
+      - api_key: []
+    put:
+      tags:
+      - "Book"
+      summary: "Updates a Book given an id "
+      description: ""
+      operationId: "updateBookById"
+      consumes:
+      - "application/x-www-form-urlencoded"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "bookId"
+        in: "path"
+        description: "ID of Book that needs to be updated"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        405:
+          description: "Invalid input"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+    delete:
+      tags:
+      - "Book"
+      summary: "Deletes a Book"
+      description: ""
+      operationId: "deleteBookById"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "bookId"
+        in: "path"
+        description: "Book id to delete"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Book not found"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+securityDefinitions:
+  petstore_auth:
+    type: "oauth2"
+    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:pets: "modify pets in your account"
+      read:pets: "read your pets"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+  Book:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      bookId:
+        type: "integer"
+        format: "int64"
+      bookName:
+        type: "string"
+        format: "string"
+      bookPrice:
+        type: "integer"
+        format: "float64"
+      bookAuthor:
+        type: "string"
+        format: "string"
+      bookPublication:
+        type: "string"
+        format: "string"
+      bookStatus:
+        type: "string"
+        description: "Book Status"
+        enum:
+        - "available"
+        - "unavailable"
+        - "outofstock"
+      complete:
+        type: "boolean"
+        default: false
+    xml:
+      name: "Book"
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      type:
+        type: "string"
+      message:
+        type: "string"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
